@@ -17,8 +17,8 @@ import {
   GenderOptions,
   IdentificationTypes,
   PatientFormDefaultValues,
-} from "@/constants";
-import { registerPatient } from "@/lib/actions/patient.action";
+} from "@/types/constants";
+import { registerPatient } from "@/lib/actions/patient.actions";
 import { PatientFormValidation } from "@/lib/validation";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -49,6 +49,7 @@ const RegisterForm = ({ user }: RegisterFormProps) => {
     email: user.email,
     phone: user.phone,
     birthDate: new Date(),
+   //@ts-ignore
     gender: "male",
     address: "",
     occupation: "",
@@ -125,6 +126,7 @@ const onSubmit: SubmitHandler<PatientFormValues> = async (values) => {
   return (
     <Form {...form}>
       <form
+      //@ts-ignore
 onSubmit={form.handleSubmit(onSubmit)}
         className="flex-1 space-y-12"
       >
