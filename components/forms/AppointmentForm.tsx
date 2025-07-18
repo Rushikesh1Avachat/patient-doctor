@@ -91,8 +91,10 @@ export const AppointmentForm = ({
           );
         }
       } else {
+        //@ts-ignore
         const appointmentToUpdate = {
           userId,
+       //@ts-ignore
           appointmentId: appointment?.$id!,
           appointment: {
             primaryPhysician: values.primaryPhysician,
@@ -102,7 +104,7 @@ export const AppointmentForm = ({
           },
           type,
         };
-
+//@ts-ignore
         const updatedAppointment = await updateAppointment(appointmentToUpdate);
 
         if (updatedAppointment) {

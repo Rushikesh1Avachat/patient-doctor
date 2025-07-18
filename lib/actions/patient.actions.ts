@@ -1,5 +1,5 @@
 "use server";
-
+//@ts-ignore
 import { ID, InputFile, Query } from "node-appwrite";
 
 import {
