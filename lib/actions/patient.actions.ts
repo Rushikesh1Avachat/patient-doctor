@@ -1,6 +1,6 @@
 "use server";
 
-import { ID, Query } from "node-appwrite";
+import { ID, InputFile, Query } from "node-appwrite";
 
 import {
   BUCKET_ID,
@@ -14,24 +14,19 @@ import {
 } from "../appwrite.config";
 import { parseStringify } from "../utils";
 
-
 // CREATE APPWRITE USER
 export const createUser = async (user: CreateUserParams) => {
   try {
     // Create new user -> https://appwrite.io/docs/references/1.5.x/server-nodejs/users#create
-  const newUser = await users.create(
-  ID.unique(),
-  user.email,
-  user.phone,
-  undefined,
-  user.name
-);
+    const newuser = await users.create(
+      ID.unique(),
+      user.email,
+      user.phone,
+      undefined,
+      user.name
+    );
 
-// 👇 this is the ID you need in the route
-const userId = newUser.$id;
-
-
-    return parseStringify(newUser);
+    return parseStringify(newuser);
   } catch (error: any) {
     // Check existing user
     if (error && error?.code === 409) {
@@ -45,7 +40,7 @@ const userId = newUser.$id;
   }
 };
 
-// // GET USER
+// GET USER
 export const getUser = async (userId: string) => {
   try {
     const user = await users.get(userId);
@@ -58,16 +53,6 @@ export const getUser = async (userId: string) => {
     );
   }
 };
-// export const getUser = async (userId: string) => {
-//   try {
-//     console.log("Fetching Appwrite User ID:", userId);
-//     const user = await users.get(userId);
-//     return parseStringify(user);
-//   } catch (error) {
-//     console.error("Appwrite getUser failed:", error);
-//     throw error;
-//   }
-// };
 
 // REGISTER PATIENT
 export const registerPatient = async ({
@@ -77,10 +62,13 @@ export const registerPatient = async ({
   try {
     // Upload file ->  // https://appwrite.io/docs/references/cloud/client-web/storage#createFile
     let file;
-    if (identificationDocument  ) {
-      const inputBlob = identificationDocument?.get("blobFile") as Blob;
-      const fileName = identificationDocument?.get("fileName") as string;
-      const inputFile = new File([inputBlob], fileName, { type: inputBlob.type });
+    if (identificationDocument) {
+      const inputFile =
+        identificationDocument &&
+        InputFile.fromBlob(
+          identificationDocument?.get("blobFile") as Blob,
+          identificationDocument?.get("fileName") as string
+        );
 
       file = await storage.createFile(BUCKET_ID!, ID.unique(), inputFile);
     }
@@ -98,7 +86,6 @@ export const registerPatient = async ({
         ...patient,
       }
     );
-console.log({gender:patient?.gender});
 
     return parseStringify(newPatient);
   } catch (error) {
@@ -107,22 +94,6 @@ console.log({gender:patient?.gender});
 };
 
 // GET PATIENT
-// export const getPatient = async (userId: string) => {
-//   try {
-//     const patients = await databases.listDocuments(
-//       DATABASE_ID!,
-//       PATIENT_COLLECTION_ID!,
-//       [Query.equal("userId", [userId])]
-//     );
-
-//     return parseStringify(patients.documents[0]);
-//   } catch (error) {
-//     console.error(
-//       "An error occurred while retrieving the patient details:",
-//       error
-//     );
-//   }
-// };
 export const getPatient = async (userId: string) => {
   try {
     const patients = await databases.listDocuments(

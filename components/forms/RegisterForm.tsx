@@ -1,11 +1,10 @@
-//@ts-ignore
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form, FormControl } from "@/components/ui/form";
@@ -18,7 +17,7 @@ import {
   IdentificationTypes,
   PatientFormDefaultValues,
 } from "@/constants";
-import { registerPatient } from "@/lib/actions/patient.action";
+import { registerPatient } from "@/lib/actions/patient.actions";
 import { PatientFormValidation } from "@/lib/validation";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -27,61 +26,36 @@ import CustomFormField, { FormFieldType } from "../CustomFormField";
 import { FileUploader } from "../FileUploader";
 import SubmitButton from "../SubmitButton";
 
-type PatientFormValues = z.infer<typeof PatientFormValidation>;
-
-type RegisterFormProps = {
-  user: {
-    $id: string;
-    name: string;
-    email: string;
-    phone: string;
-  };
-};
-
-const RegisterForm = ({ user }: RegisterFormProps) => {
+const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<PatientFormValues>({
-  resolver: zodResolver(PatientFormValidation) as any,
-  defaultValues: {
-    name: user.name,
-    email: user.email,
-    phone: user.phone,
-    birthDate: new Date(),
-    gender: "male",
-    address: "",
-    occupation: "",
-    emergencyContactName: "",
-    emergencyContactNumber: "",
-    primaryPhysician: "",
-    insuranceProvider: "",
-    insurancePolicyNumber: "",
-    allergies: "",
-    currentMedication: "",
-    familyMedicalHistory: "",
-    pastMedicalHistory: "",
-    identificationType: "",
-    identificationNumber: "",
-    identificationDocument: [],
-    treatmentConsent: false,
-    disclosureConsent: false,
-    privacyConsent: false,
-  },
-});
+  const form = useForm<z.infer<typeof PatientFormValidation>>({
+    resolver: zodResolver(PatientFormValidation),
+    defaultValues: {
+      ...PatientFormDefaultValues,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+    },
+  });
 
-
-const onSubmit: SubmitHandler<PatientFormValues> = async (values) => {
+  const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
     setIsLoading(true);
 
-    let formData: FormData | undefined = undefined;
-    if (values.identificationDocument?.length) {
-      const file = values.identificationDocument[0];
-      const blob = new Blob([file], { type: file.type });
+    // Store file info in form data as
+    let formData;
+    if (
+      values.identificationDocument &&
+      values.identificationDocument?.length > 0
+    ) {
+      const blobFile = new Blob([values.identificationDocument[0]], {
+        type: values.identificationDocument[0].type,
+      });
 
       formData = new FormData();
-      formData.append("blobFile", blob);
-      formData.append("fileName", file.name);
+      formData.append("blobFile", blobFile);
+      formData.append("fileName", values.identificationDocument[0].name);
     }
 
     try {
@@ -105,18 +79,19 @@ const onSubmit: SubmitHandler<PatientFormValues> = async (values) => {
         pastMedicalHistory: values.pastMedicalHistory,
         identificationType: values.identificationType,
         identificationNumber: values.identificationNumber,
-        identificationDocument: formData,
+        identificationDocument: values.identificationDocument
+          ? formData
+          : undefined,
         privacyConsent: values.privacyConsent,
       };
 
-   //@ts-ignore
-     const newPatient = await registerPatient(patient);
+      const newPatient = await registerPatient(patient);
 
       if (newPatient) {
         router.push(`/patients/${user.$id}/new-appointment`);
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
 
     setIsLoading(false);
@@ -125,11 +100,10 @@ const onSubmit: SubmitHandler<PatientFormValues> = async (values) => {
   return (
     <Form {...form}>
       <form
-onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit)}
         className="flex-1 space-y-12"
       >
-        {/* Form content remains unchanged */}
-    <section className="space-y-4">
+        <section className="space-y-4">
           <h1 className="header">Welcome 👋</h1>
           <p className="text-dark-700">Let us know more about yourself.</p>
         </section>
@@ -400,9 +374,8 @@ onSubmit={form.handleSubmit(onSubmit)}
             privacy policy"
           />
         </section>
-        <SubmitButton isLoading={isLoading}>
-          Submit and Continue
-        </SubmitButton>
+
+        <SubmitButton isLoading={isLoading}>Submit and Continue</SubmitButton>
       </form>
     </Form>
   );

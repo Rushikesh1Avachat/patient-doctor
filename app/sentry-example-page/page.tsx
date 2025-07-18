@@ -48,37 +48,20 @@ export default function Page() {
             fontSize: "14px",
             margin: "18px",
           }}
-          // onClick={async () => {
-          //   await Sentry.startSpan(
-          //     {
-          //       name: "Example Frontend Span",
-          //       op: "test",
-          //     },
-          //     async () => {
-          //       const res = await fetch("/api/sentry-example-api");
-          //       if (!res.ok) {
-          //         throw new Error("Sentry Example Frontend Error");
-          //       }
-          //     }
-          //   );
-          // }}
           onClick={async () => {
-  await Sentry.startSpan({
-    name: 'Example Frontend/Backend Span',
-    op: 'test'
-  }, async () => {
-    const res = await fetch("/api/sentry-example-api");
-    console.log(res);
-    
-    // if (!res.ok) {
-    //   setHasSentError(true);
-    // }
-  });
-
-  // ❌ Remove this line to prevent the intentional crash
-  // throw new SentryExampleFrontendError("This error is raised on the frontend of the example page.");
-}}
-
+            await Sentry.startSpan(
+              {
+                name: "Example Frontend Span",
+                op: "test",
+              },
+              async () => {
+                const res = await fetch("/api/sentry-example-api");
+                if (!res.ok) {
+                  throw new Error("Sentry Example Frontend Error");
+                }
+              }
+            );
+          }}
         >
           Throw error!
         </button>

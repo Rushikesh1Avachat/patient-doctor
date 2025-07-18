@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { ID, Query } from "node-appwrite";
 
-import { Appointment } from "@/types/appwrite.type";
+import { Appointment } from "@/types/appwrite.types";
 
 import {
   APPOINTMENT_COLLECTION_ID,
@@ -114,17 +114,6 @@ export const sendSMSNotification = async (userId: string, content: string) => {
   } catch (error) {
     console.error("An error occurred while sending sms:", error);
   }
-
-//   const accountSid = 'ACcdcc866447f9f6b26f31c212dc624a48';
-// const authToken = '[AuthToken]';
-// const client = require('twilio')(accountSid, authToken);
-// client.messages
-//     .create({
-//         body: 'Ahoy 👋',
-//         messagingServiceSid: 'MG75e13b1cda4eb063d259d691a2edcf2f',
-//         to: '+9109561686658'
-//     })
-//     .then((message: { sid: any; }) => console.log(message.sid));
 };
 
 //  UPDATE APPOINTMENT

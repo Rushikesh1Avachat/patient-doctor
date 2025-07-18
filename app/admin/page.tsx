@@ -5,7 +5,6 @@ import { StatCard } from "@/components/StatCard";
 import { columns } from "@/components/table/columns";
 import { DataTable } from "@/components/table/DataTable";
 import { getRecentAppointmentList } from "@/lib/actions/appointment.actions";
-import { Button } from "@/components/ui/button";
 
 const AdminPage = async () => {
   const appointments = await getRecentAppointmentList();
@@ -28,7 +27,7 @@ const AdminPage = async () => {
 
       <main className="admin-main">
         <section className="w-full space-y-4">
-          <h1 className="header">Welcome Admin 👋</h1>
+          <h1 className="header">Welcome 👋</h1>
           <p className="text-dark-700">
             Start the day with managing new appointments
           </p>
@@ -55,10 +54,7 @@ const AdminPage = async () => {
           />
         </section>
 
-        <DataTable columns={columns} data={appointments.documents} /> <br /> <br /> <br />
-        <Link href="/admin/ai-doctor">
-  <Button variant="outline">Open AI Doctor Chat</Button>
-</Link>
+        <DataTable columns={columns} data={appointments.documents} />
       </main>
     </div>
   );
