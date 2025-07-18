@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 //@ts-ignore
 import RegisterForm from "@/components/forms/RegisterForm";
 //@ts-ignore
-import { createUser, getPatient, getUser } from "@/lib/actions/patient.action";
+import { createUser, getPatient, getUser } from "@/lib/actions/patient.actions";
 
 
 // const Register = async ({ params }: { params: { userId: string } }) => {
