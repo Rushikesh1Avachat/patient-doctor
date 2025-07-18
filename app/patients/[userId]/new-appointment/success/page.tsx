@@ -66,7 +66,7 @@ const RequestSuccess = async ({
             <p> {formatDateTime(appointment.schedule).dateTime}</p>
           </div>
         </section>
-
+{/* //@ts-ignore */}
         <Button variant="outline" className="shad-primary-btn" asChild>
           <Link href={`/patients/${userId}/new-appointment`}>
             New Appointment

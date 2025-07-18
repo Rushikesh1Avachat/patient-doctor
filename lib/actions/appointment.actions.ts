@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+//@ts-ignore
 import { ID, Query } from "node-appwrite";
 
 import { Appointment } from "@/types/appwrite.types";
