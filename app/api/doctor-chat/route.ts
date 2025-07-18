@@ -1,7 +1,7 @@
 //@ts-ignore
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 //@ts-ignore
-import { db } from "@/lib/firebase";
+import {db} from "@/lib/firebase.config"
 //@ts-ignore
 import OpenAI from "openai";
 //@ts-ignore

@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 //@ts-ignore
 import { OpenAI } from "openai";
 //@ts-ignore
-import { db } from "@/lib/firebase";
+import db from "@/lib/"
 //@ts-ignore
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 //@ts-ignore
