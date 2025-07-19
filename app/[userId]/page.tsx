@@ -3,10 +3,19 @@ import Link from "next/link";
 
 import PatientForm from "@/components/forms/PatientForm";
 import { PasskeyModal } from "@/components/PasskeyModal";
-
-const Home = ({ searchParams }: SearchParamProps) => {
+interface PageProps {
+  params: {
+    userId: string;
+  };
+  searchParams?: {
+    [key: string]: string | string[] | undefined;
+  };
+  
+}
+const Home = ({ searchParams,params }: PageProps) => {
   const isAdmin = searchParams?.admin === "true";
-
+const { userId } = params;
+  const appointmentId = searchParams?.appointmentId as string | undefined;
   return (
     <div className="flex h-screen max-h-screen">
       {isAdmin && <PasskeyModal />}

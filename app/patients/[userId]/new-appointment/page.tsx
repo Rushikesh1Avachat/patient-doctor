@@ -3,15 +3,18 @@ import Image from "next/image";
 import { AppointmentForm } from "@/components/AppointmentForm";
 import { getPatient } from "@/lib/actions/patient.actions";
 interface PageProps {
-  params: { userId: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: {
+    userId: string;
+  };
+  searchParams?: {
+    [key: string]: string | string[] | undefined;
+  };
 }
 
 const Appointment = async ({ params, searchParams }: PageProps) => {
-
-   const { userId } = params;
-  const appointmentId = searchParams?.appointmentId as string;
-  const patient = await getPatient(userId);
+ const { userId } = params;
+  const appointmentId = searchParams?.appointmentId as string | undefined;
+  const patient= await getPatient(userId)
   return (
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container my-auto">
