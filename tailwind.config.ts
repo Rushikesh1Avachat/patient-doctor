@@ -1,7 +1,9 @@
 import type { Config } from "tailwindcss";
 import plugin from 'tailwindcss/plugin';
+import removeScrollbarPlugin from "./types/tailwindcss/plugin";
+import defaultTheme from 'tailwindcss/defaultTheme';
 
-const { fontFamily } = require("tailwindcss/defaultTheme");
+
 
 const config = {
   darkMode: ["class",""],
@@ -48,7 +50,7 @@ const config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
+        sans: ["var(--font-sans)", ...defaultTheme.fontFamily.sans],
       },
       backgroundImage: {
         appointments: "url('/assets/images/appointments-bg.png')",
@@ -76,21 +78,7 @@ const config = {
       },
     },
   },
- plugins: [
-    plugin(function ({ addUtilities }) {
-      addUtilities({
-        ".remove-scrollbar": {
-          /* for Webkit-based browsers */
-          "-ms-overflow-style": "none", // IE/Edge
-          "scrollbar-width": "none", // Firefox
-          "&::-webkit-scrollbar": {
-            display: "none",
-          },
-        },
-      });
-    }),
-    require("tailwindcss-animate")
-  ],
+    plugins: [removeScrollbarPlugin , require("tailwindcss-animate")],
 } satisfies Config;
 
 export default config;
