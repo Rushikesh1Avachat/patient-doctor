@@ -4,8 +4,9 @@ import Link from "next/link";
 
 
 import { PasskeyModal } from "@/components/PasskeyModal";
+import { SearchParamProps } from "@/types";
 
-const Home = ({ searchParams }: SearchParamProps) => {
+const HomePage = ({ searchParams }: SearchParamProps) => {
   const isAdmin = searchParams?.admin === "true";
 
   return (
@@ -46,4 +47,4 @@ const Home = ({ searchParams }: SearchParamProps) => {
   );
 };
 
-export default Home;
+export default HomePage;

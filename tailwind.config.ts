@@ -78,16 +78,16 @@ const config = {
   },
  plugins: [
     plugin(function ({ addUtilities }) {
-      const newUtilities = {
-        '.remove-scrollbar': {
-          '-ms-overflow-style': 'none',
-          'scrollbar-width': 'none',
+      addUtilities({
+        ".remove-scrollbar": {
+          /* for Webkit-based browsers */
+          "-ms-overflow-style": "none", // IE/Edge
+          "scrollbar-width": "none", // Firefox
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
         },
-        '.remove-scrollbar::-webkit-scrollbar': {
-          display: 'none',
-        },
-      };
-      addUtilities(newUtilities);
+      });
     }),
     require("tailwindcss-animate")
   ],
