@@ -1,18 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 @layer utilities {
   .remove-scrollbar {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE 10+ */
-  }
+    /* For Webkit browsers (Chrome, Safari, Edge) */
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
-  .remove-scrollbar::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    /* For Firefox */
+    scrollbar-width: none;
+
+    /* For IE and old Edge */
+    -ms-overflow-style: none;
   }
 }
-
 /* ========================================== TAILWIND STYLES */
 @layer base {
   /* Remove scrollbar */

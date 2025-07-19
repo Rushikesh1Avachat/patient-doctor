@@ -3,18 +3,20 @@ import Link from "next/link";
 
 import PatientForm from "@/components/forms/PatientForm";
 import { PasskeyModal } from "@/components/PasskeyModal";
-interface PageProps {
-  params: {
-    userId: string;
-  };
-  searchParams?: {
-    [key: string]: string | string[] | undefined;
-  };
-  
+interface UserPageParams {
+  userId: string;
+  admin:string,
+  appointmentId: string | undefined
 }
-const Home = ({ searchParams,params }: PageProps) => {
+
+// Define the overall props type for the Page component
+// It expects a 'params' property with the structure of UserPageParams
+interface PageProps {
+  searchParams: UserPageParams;
+}
+const Home = ({ searchParams }: PageProps) => {
   const isAdmin = searchParams?.admin === "true";
-const { userId } = params;
+const { userId } = searchParams;
   const appointmentId = searchParams?.appointmentId as string | undefined;
   return (
     <div className="flex h-screen max-h-screen">

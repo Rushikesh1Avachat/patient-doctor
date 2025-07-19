@@ -2,6 +2,7 @@ import type { Config } from "tailwindcss";
 import plugin from 'tailwindcss/plugin';
 import removeScrollbarPlugin from "./types/tailwindcss/plugin";
 import defaultTheme from 'tailwindcss/defaultTheme';
+import scrollbarHide from 'tailwind-scrollbar-hide'; // Import the plugin
 
 
 
@@ -78,7 +79,7 @@ const config = {
       },
     },
   },
-    plugins: [removeScrollbarPlugin , require("tailwindcss-animate")],
+    plugins: [removeScrollbarPlugin , require("tailwindcss-animate"), scrollbarHide],
 } satisfies Config;
 
 export default config;
