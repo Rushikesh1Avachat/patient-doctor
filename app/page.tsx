@@ -1,17 +1,10 @@
-import PatientForm from "@/components/forms/PatientForm";
 import Image from "next/image";
 import Link from "next/link";
 
-
+import PatientForm from "@/components/forms/PatientForm";
 import { PasskeyModal } from "@/components/PasskeyModal";
-interface SearchParamProps {
-  searchParams: {
-    [key: string]: string | string[] | undefined;
-  };
-}
 
-
-const HomePage = ({ searchParams }: SearchParamProps) => {
+const Home = ({ searchParams }: SearchParamProps) => {
   const isAdmin = searchParams?.admin === "true";
 
   return (
@@ -52,4 +45,4 @@ const HomePage = ({ searchParams }: SearchParamProps) => {
   );
 };
 
-export default HomePage;
+export default Home;
