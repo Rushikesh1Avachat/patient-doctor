@@ -1,7 +1,7 @@
 "use server";
 //@ts-ignore
-import { ID,InputFile, Query } from "node-appwrite";
-
+import { ID, Query } from "node-appwrite";
+import fs from 'fs'; // ✅ If using Node
 import {
   BUCKET_ID,
   DATABASE_ID,
@@ -58,31 +58,34 @@ export const getUser = async (userId: string) => {
 export const registerPatient = async ({
   identificationDocument,
   ...patient
-}: RegisterUserParams) => {
+}: RegisterUserParams): Promise<any> => {
   try {
-    // Upload file ->  // https://appwrite.io/docs/references/cloud/client-web/storage#createFile
     let file;
-    if (identificationDocument) {
-      const inputFile =
-        identificationDocument &&
-        InputFile.fromBlob(
-          identificationDocument?.get("blobFile") as Blob,
-          identificationDocument?.get("fileName") as string
-        );
 
-      file = await storage.createFile(BUCKET_ID!, ID.unique(), inputFile);
+    // Upload file
+    if (identificationDocument) {
+      const blob = identificationDocument.get("blobFile") as Blob;
+      const fileName = identificationDocument.get("fileName") as string;
+
+      const webFile = new File([blob], fileName); // ✅ Use browser File API
+      file = await storage.createFile(BUCKET_ID!, ID.unique(), webFile);
     }
 
-    // Create new patient document -> https://appwrite.io/docs/references/cloud/server-nodejs/databases#createDocument
+    // Create new patient document
+    const documentId = ID.unique();
+
+    const identificationDocumentId = file?.$id || null;
+    const identificationDocumentUrl = file?.$id
+      ? `${ENDPOINT}/storage/buckets/${BUCKET_ID}/files/${file.$id}/view?project=${PROJECT_ID}`
+      : null;
+
     const newPatient = await databases.createDocument(
       DATABASE_ID!,
       PATIENT_COLLECTION_ID!,
-      ID.unique(),
+      documentId,
       {
-        identificationDocumentId: file?.$id ? file.$id : null,
-        identificationDocumentUrl: file?.$id
-          ? `${ENDPOINT}/storage/buckets/${BUCKET_ID}/files/${file.$id}/view??project=${PROJECT_ID}`
-          : null,
+        identificationDocumentId,
+        identificationDocumentUrl,
         ...patient,
       }
     );
@@ -90,6 +93,7 @@ export const registerPatient = async ({
     return parseStringify(newPatient);
   } catch (error) {
     console.error("An error occurred while creating a new patient:", error);
+    throw error;
   }
 };
 

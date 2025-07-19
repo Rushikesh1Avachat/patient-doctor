@@ -3,9 +3,12 @@
 import { NextResponse } from 'next/server';
 //@ts-ignore
 
-import { Client, Storage, InputFile }  from 'appwrite';
+import { Client, ID, Storage }  from 'appwrite';
 import fs from 'fs';
 import path from 'path';
+import { BUCKET_ID } from '@/lib/appwrite.config';
+import { Blob } from 'node:buffer';
+import { arrayBuffer, blob } from 'node:stream/consumers';
 
 export async function POST(req: Request) {
   const client = new Client()
@@ -17,9 +20,15 @@ export async function POST(req: Request) {
   const storage = new Storage(client);
 
   // Example: Local file (for testing)
-  const filePath = path.join(process.cwd(), 'public/sample.pdf');
+//  const blob = FormData.get("blobFile") as Blob;
+// const fileName = FormData.get("fileName") as string;
+// const stream = ReadableStream(); // ReadableStream or fs.createReadStream()
 
-  const file = InputFile.fromPath(filePath, 'sample.pdf');
+ //@ts-ignore
+ const blobData = new Blob([arrayBuffer], { type: "application/pdf" });
+ //@ts-ignore
+const file = new File([blobData], 'yourFilename.ext');
+await storage.createFile(BUCKET_ID!, ID.unique(), file);
 
   try {
     const response = await storage.createFile(
