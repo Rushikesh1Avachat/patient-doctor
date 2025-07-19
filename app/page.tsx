@@ -4,9 +4,12 @@ import Link from "next/link";
 
 
 import { PasskeyModal } from "@/components/PasskeyModal";
-type SearchParamProps = {
-  searchParams: { [key: string]: string | string[] | undefined };
-};
+interface SearchParamProps {
+  searchParams: {
+    [key: string]: string | string[] | undefined;
+  };
+}
+
 
 const HomePage = ({ searchParams }: SearchParamProps) => {
   const isAdmin = searchParams?.admin === "true";
